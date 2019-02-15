@@ -1,0 +1,60 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-Online-old/Reversi-Online-old.csproj",
+    "projectName": "Reversi-Online-old",
+    "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-Online-old/Reversi-Online-old.csproj",
+    "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-Online-old/obj/",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.1"
+    ],
+    "frameworks": {
+      "netcoreapp2.1": {
+        "projectReferences": {
+          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj": {
+            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj"
+          },
+          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj": {
+            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.1": {
+      "dependencies": {
+        "Microsoft.AspNetCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.1, )",
+          "autoReferenced": true
+        },
+        "Microsoft.AspNetCore.Http.Extensions": {
+          "target": "Package",
+          "version": "[2.1.1, )"
+        },
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.0, )",
+          "autoReferenced": true
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}

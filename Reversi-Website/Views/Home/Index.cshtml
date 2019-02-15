@@ -1,0 +1,27 @@
+﻿@using Reversi.Game
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="game-screen">
+    <div id="scenario-menu" class="menu-left">
+        <form id="scenario-form">
+            <select id="scenario-selector" required name="scenario">
+                @{
+                    int index = 0;
+                }
+                @foreach (Scenario scenario in Scenario.Scenarios)
+                {
+                    string description = $"Players: {scenario.Players.Count}";
+                    <option value="@index">@description</option>
+                    index++;
+                }
+            </select><br/>
+            <input type="submit"/>
+        </form>
+    </div>
+
+    <div id="main-board" class="menu-right">
+
+    </div>
+</div>
