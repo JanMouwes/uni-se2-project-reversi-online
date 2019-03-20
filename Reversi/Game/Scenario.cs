@@ -21,91 +21,49 @@ namespace Reversi.Game
         public const int DEFAULT_SIZE = 8;
 
         public Size BoardSize { get; } = new Size(DEFAULT_SIZE, DEFAULT_SIZE);
-        public List<Player> Players { get; }
-        public Dictionary<Coords, Piece> StartingPieces { get; }
+        public int PlayerCount => StartingPositions.Select(item => item.Value).Distinct().Count();
+        public Dictionary<Coords, string> StartingPositions { get; }
 
-        public Scenario(List<Player> players, IDictionary<Coords, Piece> startingPieces, Size? boardSize = null)
+        public Scenario(IDictionary<Coords, string> startingPositions, Size? boardSize = null)
         {
-            Dictionary<Coords, Piece> enumerable = new Dictionary<Coords, Piece>(startingPieces);
-            if (enumerable.Select(item => item.Value.Colour).Distinct().Count() > players.Count)
-                throw new ArgumentException("amount of colours in startingPieces more than playerCount");
-
             if (boardSize != null) BoardSize = (Size) boardSize;
-            Players = players;
-            StartingPieces = enumerable;
+
+            StartingPositions = startingPositions.ToDictionary(item => item.Key, item => item.Value);
         }
 
         public static Scenario DefaultScenario()
         {
-            Dictionary<Coords, Piece> pieces = new Dictionary<Coords, Piece>();
-            Player blackPlayer = new Player()
+            const string whiteHex = "FFFFFF";
+            const string blackHex = "000000";
+
+            IDictionary<Coords, string> startingPositions = new Dictionary<Coords, string>
             {
-                Colour = GameColour.Black
-            };
-            Player whitePlayer = new Player()
-            {
-                Colour = GameColour.White
-            };
-            List<Player> players = new List<Player>
-            {
-                blackPlayer, whitePlayer
+                {new Coords(3, 3), whiteHex},
+                {new Coords(4, 4), whiteHex},
+                {new Coords(3, 4), blackHex},
+                {new Coords(4, 3), blackHex}
             };
 
-            PieceFactory blackFactory = new PieceFactory(blackPlayer);
-            PieceFactory whiteFactory = new PieceFactory(whitePlayer);
-
-            pieces.Add(new Coords(3, 3), whiteFactory.CreatePiece());
-            pieces.Add(new Coords(4, 4), whiteFactory.CreatePiece());
-            pieces.Add(new Coords(3, 4), blackFactory.CreatePiece());
-            pieces.Add(new Coords(4, 3), blackFactory.CreatePiece());
-
-            foreach (KeyValuePair<Coords, Piece> coordsAndPiece in pieces)
-            {
-                coordsAndPiece.Value.Position = coordsAndPiece.Key;
-            }
-
-            return new Scenario(players, pieces);
+            return new Scenario(startingPositions);
         }
 
         public static Scenario DefaultScenario2()
         {
-            Dictionary<Coords, Piece> pieces = new Dictionary<Coords, Piece>();
-            Player blackPlayer = new Player()
+            const string whiteHex = "FFFFFF";
+            const string blackHex = "000000";
+            const string yellowHex = "FFFF00";
+
+            IDictionary<Coords, string> startingPositions = new Dictionary<Coords, string>
             {
-                Colour = GameColour.Black
-            };
-            Player whitePlayer = new Player()
-            {
-                Colour = GameColour.White
-            };
-            Player yellowPlayer = new Player()
-            {
-                Colour = GameColour.Yellow
-            };
-            List<Player> players = new List<Player>
-            {
-                blackPlayer, whitePlayer, yellowPlayer
+                {new Coords(3, 3), whiteHex},
+                {new Coords(4, 4), whiteHex},
+                {new Coords(3, 4), blackHex},
+                {new Coords(4, 3), blackHex},
+                {new Coords(5, 3), yellowHex},
+                {new Coords(5, 4), yellowHex}
             };
 
-            PieceFactory blackFactory = new PieceFactory(blackPlayer);
-            PieceFactory whiteFactory = new PieceFactory(whitePlayer);
-            PieceFactory yellowFactory = new PieceFactory(yellowPlayer);
-
-            pieces.Add(new Coords(3, 3), whiteFactory.CreatePiece());
-            pieces.Add(new Coords(4, 4), whiteFactory.CreatePiece());
-
-            pieces.Add(new Coords(3, 4), blackFactory.CreatePiece());
-            pieces.Add(new Coords(4, 3), blackFactory.CreatePiece());
-
-            pieces.Add(new Coords(5, 3), yellowFactory.CreatePiece());
-            pieces.Add(new Coords(5, 4), yellowFactory.CreatePiece());
-
-            foreach ((Coords key, Piece value) in pieces)
-            {
-                value.Position = key;
-            }
-
-            return new Scenario(players, pieces);
+            return new Scenario(startingPositions);
         }
     }
 }

@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using Reversi.Board;
+using Microsoft.Extensions.Primitives;
 using Reversi.Game;
-using Reversi.GameEntities;
-using Reversi.Util;
-using ReversiAPI.Util;
-using SessionExtensions;
+using ReversiAPI.Lobby;
+using ReversiAPI.Model.ViewModel;
+using ReversiAPI.Session;
 
 namespace ReversiAPI.Controllers
 {
@@ -18,60 +11,48 @@ namespace ReversiAPI.Controllers
     [ApiController]
     public class GameController : ControllerBase
     {
-        private GameSessionHelper gameSessionHelper;
-
         public GameController()
         {
-            gameSessionHelper = new GameSessionHelper(this);
         }
 
         // GET api/reversi
         [HttpGet]
-        public ActionResult<BoardInfo> Get()
+        public ActionResult<Game> Get()
         {
-            return new JsonResult(new BoardInfo(new Board(8, 8)));
+            if (!Request.Headers.TryGetValue("session-id", out StringValues values)) return new BadRequestObjectResult("Missing header session-id");
+
+            string sessionId = values;
+
+            if (!UserSessionManager.UserSessions.TryGetValue(sessionId, out UserSession session))
+                return new NotFoundObjectResult("No session registered"); //TODO const-ify this
+
+            return new JsonResult(new GameInfo(session.Lobby.Game));
         }
 
-        // GET api/reversi/1,2
-        [HttpGet("{coordsString}")]
-        public ActionResult Get(string coordsString)
-        {
-            if (!Regex.IsMatch(coordsString, "^([0-9],[0-9])$"))
-                return new BadRequestResult();
-
-            char[] charArray = coordsString.ToCharArray();
-
-            Coords cellCoords = new Coords()
-            {
-                X = int.Parse(charArray[0].ToString()),
-                Y = int.Parse(charArray[2].ToString())
-            };
-
-            return new JsonResult(gameSessionHelper.CurrentGame.Board.CellFromCoordinates(cellCoords));
-        }
-
-        // POST api/move
+        // POST api/game
         [HttpPost]
         public ActionResult Post([FromForm] int scenarioId)
         {
+            if (!Request.Headers.TryGetValue("session-id", out StringValues values)) return new BadRequestResult();
+            string sessionId = values;
+
             if (Scenario.Scenarios.Length <= scenarioId) return new NotFoundResult();
 
             Scenario scenario = Scenario.Scenarios[scenarioId];
 
-            try
-            {
-                gameSessionHelper.CurrentGame = new Game(scenario);
-            }
-            catch (ArgumentException e)
-            {
-                return new ConflictResult();
-            }
+            UserSession userSession = UserSessionManager.UserSessions[sessionId];
+            GameLobby lobby = userSession.Lobby;
 
-            gameSessionHelper.SessionPlayer = scenario.Players.First();
+//            if (lobby.Game != null) return new ConflictObjectResult("Session already has game");
 
-            Response.Cookies.Append("SessionId", HttpContext.Session.Id);
+            lobby.Game = new Game(scenario);
 
-            return new OkObjectResult(HttpContext.Session); //TODO return GameLobby-id
+            const string whiteHex = "FFFFFF";
+
+            userSession.Player = userSession.Lobby.Game.Players[whiteHex];
+            //TODO Player from Database (maybe with colour)
+
+            return new OkResult();
         }
     }
 }

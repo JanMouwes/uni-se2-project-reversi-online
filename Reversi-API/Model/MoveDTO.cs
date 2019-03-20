@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using Reversi.Game;
 using Reversi.Util;
 
@@ -6,14 +5,24 @@ namespace ReversiAPI.Model
 {
     public class MoveDTO
     {
-        [JsonProperty("from")] public Coords From { get; set; }
+        public int FromX { get; set; }
+        public int FromY { get; set; }
 
-        [JsonProperty("to")] public Coords To { get; set; }
-        
-        public Move ToMove => new Move()
+        public int ToX { get; set; }
+        public int ToY { get; set; }
+
+        public Move ToMove => new Move
         {
-            From = From,
-            To = To,
+            From = new Coords
+            {
+                X = FromX,
+                Y = FromY
+            },
+            To = new Coords
+            {
+                X = ToX,
+                Y = ToY
+            }
         };
     }
 }

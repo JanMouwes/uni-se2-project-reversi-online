@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Reversi\Reversi.csproj" />
-      <ProjectReference Include="..\SessionExtensions\SessionExtensions.csproj" />
     </ItemGroup>
 
 </Project>

@@ -16,8 +16,6 @@ namespace Reversi.Board
         public Cell[,] Cells { get; }
         public Size Size => new Size(Cells.GetLength(0), Cells.GetLength(1));
 
-        public BoardInfo BoardInfo => new BoardInfo(this);
-
         public Board(int width, int height)
         {
             if (width < 0 || height < 0) throw new IndexOutOfRangeException();
@@ -26,8 +24,10 @@ namespace Reversi.Board
         }
 
         public IEnumerable<Cell> UnoccupiedCoords => from cell in Cells.OfType<Cell>()
-            where cell.CurrentPiece != null
+            where cell.Occupant != null
             select cell;
+
+        public bool CellExists(Coords coords) => Cells.OfType<Cell>().Any(cell => coords == cell.Position);
 
         public Cell CellFromCoordinates(Coords coords) => Cells[coords.X, coords.Y];
 
@@ -51,7 +51,7 @@ namespace Reversi.Board
             if (!AreCoordsInRange(x, y))
                 throw new ArgumentOutOfRangeException(COORDS_OUT_OF_RANGE_MESSAGE);
 
-            return Cells[x, y].CurrentPiece != null;
+            return Cells[x, y].Occupant != null;
         }
 
         /// <inheritdoc cref="AddPiece(Reversi.GameEntities.Piece,int,int)"/>
@@ -73,7 +73,7 @@ namespace Reversi.Board
 
             if (CellIsOccupied(x, y)) throw new ArgumentException(CELL_OCCUPIED_MESSAGE);
 
-            Cells[x, y].CurrentPiece = piece;
+            Cells[x, y].Occupant = piece;
         }
 
         public override string ToString()
@@ -95,7 +95,7 @@ namespace Reversi.Board
 
                 for (int yIndex = 0; yIndex < Size.Width; yIndex++)
                 {
-                    char addChar = Cells[yIndex, xIndex].CurrentPiece?.Colour.ToString().ToCharArray()[0] ?? '_';
+                    char addChar = Cells[xIndex, yIndex].Occupant?.Owner.Colour.ToString().ToCharArray()[0] ?? '_';
 
                     stringBuilder.Append(" ");
                     stringBuilder.Append(addChar);

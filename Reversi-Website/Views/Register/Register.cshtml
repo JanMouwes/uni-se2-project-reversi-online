@@ -1,0 +1,55 @@
+@using System.Text
+@model Reversi_Website.Models.Login.RegisterViewModel;
+
+@{
+    ViewBag.Title = "Registration";
+    Layout = "_Layout";
+}
+<style type="text/css">.errors-list { color: red }</style>
+
+<h2>Registration</h2>
+<div>
+    <form id="register-form" method="post" asp-action="OnPost">
+        @{
+            Dictionary<string, object> labelHtmlAttributes = new Dictionary<string, object>
+            {
+                {"type", "email"},
+                {"autocomplete", "email"}
+            };
+            Dictionary<string, object> passwordHtmlAttributes = new Dictionary<string, object>
+            {
+                {"autocomplete", "new-password"}
+            };
+        }
+
+
+
+        @if (ViewData.TryGetValue("success", out object value))
+        {
+            //NOTE I hate this whole block. TODO rewrite this junk
+            if (!(bool) value && ViewData.TryGetValue("errors", out object errorObject))
+            {
+                if (errorObject is List<string> errors)
+                {
+                    <ul class="errors-list">
+                        @foreach (string error in errors)
+                        {
+                            <li>@error</li>
+                        }
+                    </ul>
+                }
+            }
+        }
+
+        @Html.LabelFor(model => model.Email)
+        @Html.TextBoxFor(model => model.Email, labelHtmlAttributes)
+
+        @Html.LabelFor(model => model.Password)
+        @Html.PasswordFor(model => model.Password, passwordHtmlAttributes)
+
+        @Html.LabelFor(model => model.PasswordConfirmation)
+        @Html.PasswordFor(model => model.PasswordConfirmation, passwordHtmlAttributes)
+
+        <input type="submit" value="Send"/>
+    </form>
+</div>

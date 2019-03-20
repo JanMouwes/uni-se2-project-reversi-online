@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Reversi.Board;
-using Reversi.Game;
 using Reversi.Util;
 using ReversiAPI.Util;
-using SessionExtensions;
 
 namespace ReversiAPI.Controllers
 {
@@ -13,24 +12,35 @@ namespace ReversiAPI.Controllers
     [ApiController]
     public class BoardController : ControllerBase
     {
-        private readonly GameSessionHelper sessionHelper;
-
-        public BoardController()
-        {
-            sessionHelper = new GameSessionHelper(this);
-        }
-
         // GET api/reversi
         [HttpGet]
         public ActionResult<BoardInfo> Get()
         {
-            return new JsonResult(new BoardInfo(new Board(8, 8)));
+            if (!Request.Headers.TryGetValue("session-id", out StringValues values)) return new BadRequestResult();
+
+            if (!GameSessionHelper.SessionExists(values.ToString())) return new NotFoundResult();
+
+            GameSessionHelper sessionHelper = new GameSessionHelper(values.ToString());
+
+            return new JsonResult(new BoardInfo(sessionHelper.CurrentGame.Board));
         }
 
         // GET api/reversi/1,2
         [HttpGet("{coordsString}")]
         public ActionResult Get(string coordsString)
         {
+            if (!Request.Headers.TryGetValue("session-id", out StringValues values)) return new BadRequestResult();
+
+            GameSessionHelper sessionHelper;
+            try
+            {
+                sessionHelper = new GameSessionHelper(values.ToString());
+            }
+            catch (ArgumentException)
+            {
+                return new NotFoundResult();
+            }
+
             if (!Regex.IsMatch(coordsString, "^([0-9],[0-9])$"))
                 return new BadRequestResult();
 

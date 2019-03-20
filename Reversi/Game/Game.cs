@@ -22,31 +22,37 @@ namespace Reversi.Game
 
         public Player CurrentPlayer => PlayerQueue.Peek();
 
-        public Dictionary<GameColour, Player> Players { get; } = new Dictionary<GameColour, Player>();
-
-        public IEnumerable<GameColour> AvailableColours =>
-            from colour in Enum.GetValues(typeof(GameColour)).OfType<GameColour>()
-            where !Players.ContainsKey(colour)
-            select colour;
+        public Dictionary<string, Player> Players { get; } = new Dictionary<string, Player>();
 
         /// <summary>
         /// Creates new Game with board
         /// </summary>
         /// <param name="gameScenario">Class containing all needed values to start a game</param>
-        public Game(Scenario gameScenario) //TODO change to Scenario
+        public Game(Scenario gameScenario)
         {
             BoardFactory boardFactory = new BoardFactory();
             Board = boardFactory.CreateBoard(gameScenario.BoardSize);
             Spawner = new PieceSpawner(Board);
 
-            foreach (KeyValuePair<Coords, Piece> piece in gameScenario.StartingPieces)
-            {
-                Spawner.SpawnPiece(piece.Value, piece.Key);
-            }
+            Dictionary<string, PieceFactory> cachedFactories = new Dictionary<string, PieceFactory>();
 
-            foreach (Player scenarioPlayer in gameScenario.Players)
+            foreach ((Coords coords, string gameColour) in gameScenario.StartingPositions)
             {
-                AddPlayer(scenarioPlayer);
+                if (!Players.ContainsKey(gameColour))
+                {
+                    Player player = new Player
+                    {
+                        Colour = gameColour
+                    };
+
+                    AddPlayer(player);
+
+                    cachedFactories.Add(gameColour, new PieceFactory(player));
+                }
+
+                PieceFactory pieceFactory = cachedFactories[gameColour];
+
+                Spawner.SpawnPiece(pieceFactory.CreatePiece(), coords);
             }
         }
 
@@ -95,7 +101,7 @@ namespace Reversi.Game
 
             IEnumerable<Coords> coordsInBetween = coordsCalculator.GetCoordinatesOnAxisWith(to);
 
-            return Board.CellsFromCoordinates(coordsInBetween).All(cell => cell.CurrentPiece != null && cell.CurrentPiece.Colour != player.Colour);
+            return Board.CellsFromCoordinates(coordsInBetween).All(cell => cell.Occupant != null && cell.Occupant.Owner != player);
         }
 
         public bool TryMakeMove(Player player, Move move, out List<string> errors)
@@ -105,12 +111,18 @@ namespace Reversi.Game
             Coords from = move.From;
             Coords to = move.To;
 
+            if (!Board.CellExists(from) || !Board.CellExists(to))
+            {
+                errors.Add($"Cell out of range");
+                return false;
+            }
+
             //List of validation checks, error (failure) messages as keys
             Dictionary<string, bool> checkList = new Dictionary<string, bool>()
             {
                 {"Cell 'from' not occupied", !Board.CellIsOccupied(from)},
                 {"Cell 'to' occupied", Board.CellIsOccupied(to)},
-                {"Cell not owned by player", Board.CellFromCoordinates(from).CurrentPiece.Colour != player.Colour},
+                {"Cell not owned by player", Board.CellFromCoordinates(from).Occupant.Owner != player},
             };
 
             List<string> checkErrors = checkList.Where(item => item.Value).Select(item => item.Key).ToList();
@@ -138,7 +150,7 @@ namespace Reversi.Game
 
             foreach (Cell cell in Board.CellsFromCoordinates(cellsToTurn))
             {
-                cell.CurrentPiece.Colour = player.Colour;
+                cell.Occupant.Owner = player;
             }
 
             PieceFactory pieceFactory = new PieceFactory(player);

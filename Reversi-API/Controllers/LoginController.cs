@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Reversi.Board;
-using Reversi.Game;
-using Reversi.Util;
 using ReversiAPI.Model;
-using ReversiAPI.Util;
-using SessionExtensions;
 
 namespace ReversiAPI.Controllers
 {

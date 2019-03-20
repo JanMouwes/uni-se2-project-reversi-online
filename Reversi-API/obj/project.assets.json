@@ -4356,19 +4356,6 @@
         "runtime": {
           "bin/placeholder/Reversi.dll": {}
         }
-      },
-      "SessionExtensions/1.0.0": {
-        "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
-        "dependencies": {
-          "Microsoft.AspNetCore.Http.Extensions": "2.1.1"
-        },
-        "compile": {
-          "bin/placeholder/SessionExtensions.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/SessionExtensions.dll": {}
-        }
       }
     }
   },
@@ -5277,7 +5264,6 @@
       "sha512": "BOK5fckW9v7xWjpEI6bPGwkjw10OPVASZcAa8HoWJo/0Mmg4Azddj92v8noU+YgvD/6zNZ9o/RiRXXKxk5rYwQ==",
       "type": "package",
       "path": "microsoft.aspnetcore.razor.design/2.1.1",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5641,7 +5627,6 @@
       "sha512": "EtegM+xm0HLJJJZ3+wcSRGKQmRpYexgObRj/7w65e3OEQ/5pCYNwmE7lbrqfbKC75X0RrFnUGjLRN8f5pnNKrA==",
       "type": "package",
       "path": "microsoft.codeanalysis.analyzers/1.1.0",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5880,7 +5865,6 @@
       "sha512": "J0GPkscGtAWsUYuDJqSDKpyzWE8tu7RDD/fZYPpFL9s4d6mkuj0M88vDqcFemZF60MhGA7lxO/gAo2pfwl3z0g==",
       "type": "package",
       "path": "microsoft.entityframeworkcore.tools/2.1.1",
-      "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -11925,11 +11909,6 @@
       "type": "project",
       "path": "../Reversi/Reversi.csproj",
       "msbuildProject": "../Reversi/Reversi.csproj"
-    },
-    "SessionExtensions/1.0.0": {
-      "type": "project",
-      "path": "../SessionExtensions/SessionExtensions.csproj",
-      "msbuildProject": "../SessionExtensions/SessionExtensions.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -11937,7 +11916,6 @@
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
       "Reversi >= 1.0.0",
-      "SessionExtensions >= 1.0.0",
       "System.Net.Http.Formatting.Extension >= 5.2.3"
     ]
   },
@@ -11948,11 +11926,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/Reversi-API.csproj",
+      "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/Reversi-API.csproj",
       "projectName": "Reversi-API",
-      "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/Reversi-API.csproj",
+      "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/Reversi-API.csproj",
       "packagesPath": "/Users/gebruiker/.nuget/packages/",
-      "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/obj/",
+      "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
@@ -11969,11 +11947,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj": {
-              "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj"
-            },
-            "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj": {
-              "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj"
+            "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj": {
+              "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj"
             }
           }
         }

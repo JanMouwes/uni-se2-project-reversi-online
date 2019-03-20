@@ -1,0 +1,26 @@
+.feedback-widget {
+    border: 1px solid #333333;
+    border-radius: 5px;
+    width: 200px;
+    padding: 10px;
+}
+
+.feedback-widget-title, .feedback-widget-content {
+    display: block;
+}
+
+.feedback-widget-title {
+    font-weight: bold;
+}
+
+.feedback-widget-positive {
+    background: #83c04b;
+}
+
+.feedback-widget-negative {
+    background: #c06254;
+}
+
+.feedback-widget-neutral {
+    background: #c0b66b;
+}

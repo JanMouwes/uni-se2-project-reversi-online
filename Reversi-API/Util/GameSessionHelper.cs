@@ -1,44 +1,36 @@
 using System;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Reversi.Game;
-using SessionExtensions;
+using ReversiAPI.Session;
 
 namespace ReversiAPI.Util
 {
-    public class GameSessionHelper
+    public class GameSessionHelper : IDisposable
     {
-        private readonly ControllerBase controller;
+        private readonly UserSession session;
 
-        public Game CurrentGame
+        public static bool SessionExists(string sessionId) => UserSessionManager.UserSessions.ContainsKey(sessionId);
+
+        public Game CurrentGame => session.Lobby.Game;
+
+
+        public Player SessionPlayer => session.Player;
+
+        public bool SessionPlayerIsCurrentPlayer => SessionPlayer == CurrentGame.CurrentPlayer;
+
+        public GameSessionHelper(string sessionId)
         {
-            get => controller.HttpContext.Session.Get<Game>("currentGame");
+            if (!SessionExists(sessionId)) throw new ArgumentException();
 
-            set
-            {
-                if (controller.HttpContext.Session.Get<Game>("currentGame") != null) throw new ArgumentException();
-
-                controller.HttpContext.Session.Set("currentGame", value);
-            }
+            this.session = UserSessionManager.UserSessions[sessionId];
         }
 
         public void ClearGame()
         {
-            controller.HttpContext.Session.Set("currentGame", null);
+            session.Lobby = null;
         }
 
-        public Player SessionPlayer
+        public void Dispose()
         {
-            get => JsonConvert.DeserializeObject<Player>(controller.HttpContext.Session.GetString("sessionPlayer"));
-            set => controller.HttpContext.Session.SetString("sessionPlayer", JsonConvert.SerializeObject(value));
-        }
-
-        public bool SessionPlayerIsCurrentPlayer => SessionPlayer == CurrentGame.CurrentPlayer;
-
-        public GameSessionHelper(ControllerBase controller)
-        {
-            this.controller = controller;
         }
     }
 }

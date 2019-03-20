@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/Reversi-API.csproj",
+    "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/Reversi-API.csproj",
     "projectName": "Reversi-API",
-    "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/Reversi-API.csproj",
-    "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi-API/obj/",
+    "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/Reversi-API.csproj",
+    "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi-API/obj/",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
@@ -15,11 +15,8 @@
     "frameworks": {
       "netcoreapp2.1": {
         "projectReferences": {
-          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj": {
-            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/Reversi/Reversi.csproj"
-          },
-          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj": {
-            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/C#/Reversi-Online/SessionExtensions/SessionExtensions.csproj"
+          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj": {
+            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj"
           }
         }
       }

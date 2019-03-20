@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Reversi.Board;
 using Reversi.Game;
 using Reversi.GameEntities;
-using SessionExtensions;
+using ReversiAPI.Model.ViewModel;
+using ReversiAPI.Session;
 
 namespace ReversiAPI.Controllers
 {
@@ -11,13 +13,15 @@ namespace ReversiAPI.Controllers
     [ApiController]
     public class PieceController : ControllerBase
     {
-        private Game CurrentGame => HttpContext.Session.Get<Game>("currentGame");
-
         // GET api/pieces
         [HttpGet]
-        public ActionResult<IEnumerable<Piece>> GetPieces()
+        public ActionResult<IEnumerable<PieceInfo>> GetPieces()
         {
-            IEnumerable<Piece> pieces = CurrentGame.Board.BoardInfo.Pieces;
+            string sessionId = Request.Headers["session-id"].ToString(); //FIXME to constant
+
+            Game currentGame = UserSessionManager.UserSessions[sessionId].Lobby.Game;
+
+            IEnumerable<PieceInfo> pieces = new BoardInfo(currentGame.Board).Pieces;
 
             return pieces.ToList();
         }

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ReversiAPI.Session;
 
 namespace ReversiAPI
 {
@@ -12,6 +15,8 @@ namespace ReversiAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            UserSessionManager.UserSessions = new Dictionary<string, UserSession>();
         }
 
         public IConfiguration Configuration { get; }
@@ -19,11 +24,6 @@ namespace ReversiAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
             services.AddMemoryCache();
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -41,7 +41,12 @@ namespace ReversiAPI
                 app.UseHsts();
             }
 
-            app.UseCors(builder => { builder.AllowAnyOrigin(); });
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyHeader();
+                builder.AllowAnyMethod();
+            });
 
             app.UseHttpsRedirection();
             app.UseSession();

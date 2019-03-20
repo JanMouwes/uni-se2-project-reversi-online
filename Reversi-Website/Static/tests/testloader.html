@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="shortcut icon" type="image/png">
+    <link rel="stylesheet" type="text/css" href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
+
+    <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+    <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+    <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+
+    <source-files>
+        <script src="../src/js/modules/reversi/reversi.js"></script>
+        <script src="../src/js/modules/event-emitter/events.js"></script>
+        <script src="../src/js/modules/event-emitter/events/event-emitter.js"></script>
+        <script src="../src/js/modules/event-emitter/events/event-subscriber.js"></script>
+
+        <script src="../src/js/modules/feedback-widget/feedback-widget.js"></script>
+        <script src="../src/js/modules/feedback-widget/coords/coords.js"></script>
+        <script src="../src/js/modules/feedback-widget/notification/notification.js"></script>
+    </source-files>
+
+    <test-files>
+        <script src="event-emitter/event-emitter.spec.js"></script>
+        <script src="feedback-widget/coords/coords.spec.js"></script>
+        <script src="feedback-widget/notification/notification.spec.js"></script>
+        <script src="feedback-widget/feedback-widget.spec.js"></script>
+    </test-files>
+
+</head>
+<body>
+
+</body>
+</html>

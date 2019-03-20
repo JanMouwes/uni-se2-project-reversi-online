@@ -1,0 +1,59 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi.Tests/Reversi.Tests.csproj",
+    "projectName": "Reversi.Tests",
+    "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi.Tests/Reversi.Tests.csproj",
+    "outputPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi.Tests/obj/",
+    "projectStyle": "PackageReference",
+    "fallbackFolders": [
+      "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+    ],
+    "originalTargetFrameworks": [
+      "netcoreapp2.1"
+    ],
+    "frameworks": {
+      "netcoreapp2.1": {
+        "projectReferences": {
+          "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj": {
+            "projectPath": "/Users/gebruiker/Desktop/School/Windesheim/Windesheim 2018-2019/Semester 2/Reversi-Online/Reversi/Reversi.csproj"
+          }
+        }
+      }
+    },
+    "warningProperties": {
+      "warnAsError": [
+        "NU1605"
+      ]
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.1": {
+      "dependencies": {
+        "Microsoft.NET.Test.Sdk": {
+          "target": "Package",
+          "version": "[15.8.0, )"
+        },
+        "Microsoft.NETCore.App": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "[2.1.0, )",
+          "autoReferenced": true
+        },
+        "NUnit3TestAdapter": {
+          "target": "Package",
+          "version": "[3.10.0, )"
+        },
+        "nunit": {
+          "target": "Package",
+          "version": "[3.10.1, )"
+        }
+      },
+      "imports": [
+        "net461"
+      ],
+      "assetTargetFallback": true,
+      "warn": true
+    }
+  }
+}

@@ -18,7 +18,7 @@ namespace ReversiAPI.Controllers
 
         // GET api/move/5
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<Move>> Get(int id)
+        public ActionResult Get(int id)
         {
             if (Scenario.Scenarios.Length <= id) return new NotFoundResult();
 

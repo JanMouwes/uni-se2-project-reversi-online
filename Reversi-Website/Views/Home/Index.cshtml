@@ -2,21 +2,24 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<script>
+    window.addEventListener("load",
+        () => {
+            var target = document.getElementById("main-board");
+            
+            ReversiModule.init(target);
+        });
+</script>
+<style>
+    #main-board {
+        width: 600px;
+        height: 600px;
+    }
+</style>
 <div class="game-screen">
     <div id="scenario-menu" class="menu-left">
         <form id="scenario-form">
-            <select id="scenario-selector" required name="scenario">
-                @{
-                    int index = 0;
-                }
-                @foreach (Scenario scenario in Scenario.Scenarios)
-                {
-                    string description = $"Players: {scenario.Players.Count}";
-                    <option value="@index">@description</option>
-                    index++;
-                }
-            </select><br/>
+            <br/>
             <input type="submit"/>
         </form>
     </div>

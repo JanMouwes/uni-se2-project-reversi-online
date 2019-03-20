@@ -16,7 +16,7 @@ namespace Reversi.Factories
         {
             Piece piece = new Piece()
             {
-                Colour = player.Colour
+                Owner = player
             };
             player.Pieces.Add(piece);
 
