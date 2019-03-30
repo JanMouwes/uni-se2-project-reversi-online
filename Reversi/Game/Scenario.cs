@@ -51,19 +51,16 @@ namespace Reversi.Game
         {
             const string whiteHex = "FFFFFF";
             const string blackHex = "000000";
-            const string yellowHex = "FFFF00";
 
             IDictionary<Coords, string> startingPositions = new Dictionary<Coords, string>
             {
-                {new Coords(3, 3), whiteHex},
-                {new Coords(4, 4), whiteHex},
-                {new Coords(3, 4), blackHex},
-                {new Coords(4, 3), blackHex},
-                {new Coords(5, 3), yellowHex},
-                {new Coords(5, 4), yellowHex}
+                {new Coords(7, 7), whiteHex},
+                {new Coords(8, 8), whiteHex},
+                {new Coords(7, 8), blackHex},
+                {new Coords(8, 7), blackHex}
             };
 
-            return new Scenario(startingPositions);
+            return new Scenario(startingPositions, new Size(16, 16));
         }
     }
 }

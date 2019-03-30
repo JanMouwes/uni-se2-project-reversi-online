@@ -90,12 +90,9 @@ Reversi.BoardSVG = function (game) {
 
     /**
      *
-     * @type {{subscribe: (function(*=): void), unsubscribe: (function(*=): void)}}
+     * @type {EventModule.EventSubscriber}
      */
-    this.updateInvoked = {
-        subscribe: callback => eventEmitter.subscribe(eventNames.update, callback),
-        unsubscribe: callback => eventEmitter.unsubscribe(eventNames.update, callback)
-    };
+    this.updateInvoked = new EventModule.EventSubscriber(eventNames.update, eventEmitter);
 
     /**
      *

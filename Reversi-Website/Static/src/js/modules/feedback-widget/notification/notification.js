@@ -43,7 +43,7 @@ FeedbackWidget.Notification = function (type, title, content) {
 
         this.displayData.coords = coords;
 
-        if (this.element == null) throw new Error("notification's element is null");
+        if (this.element == null) throw new Error("element is null");
 
         Object.assign(this.element.style, {
             position: "sticky",
@@ -53,6 +53,10 @@ FeedbackWidget.Notification = function (type, title, content) {
 
         eventEmitter.emit(eventNames.displayed);
 
+        if (this.displayTarget == null) throw new Error("displayTarget is null or undefined");
+
+        this.displayTarget.appendChild(this.element);
+
         return this.element;
     };
 
@@ -61,6 +65,7 @@ FeedbackWidget.Notification = function (type, title, content) {
     };
 
     this.element = null;
+    this.displayTarget = null;
 
     this.displayData = {
         coords: null

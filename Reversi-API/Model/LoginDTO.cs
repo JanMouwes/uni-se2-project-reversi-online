@@ -4,6 +4,6 @@ namespace ReversiAPI.Model
     {
         public string Username;
 
-        public string PasswordHash;
+        public string Password;
     }
 }

@@ -54,17 +54,5 @@ namespace ReversiAPI.Controllers
 
             return new JsonResult(sessionHelper.CurrentGame.Board.CellFromCoordinates(cellCoords));
         }
-
-        // PUT api/reversi/5
-        [HttpPut]
-        public void Put([FromBody] string value)
-        {
-        }
-
-        // DELETE api/reversi/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
     }
 }

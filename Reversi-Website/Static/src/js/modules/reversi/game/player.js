@@ -51,6 +51,8 @@ Reversi.Player = function (username, colour) {
     this.ownsPiece = (piece) => {
         if (piece == null) return false;
 
-        return this.colour() === piece.colour;
+        let strip_colour_hex = inputString => inputString.replace("#", "");
+
+        return strip_colour_hex(this.colour()) === strip_colour_hex(piece.colour);
     }
 };

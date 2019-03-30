@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Reversi.Game;
@@ -26,7 +27,7 @@ namespace ReversiAPI.Controllers
             if (!UserSessionManager.UserSessions.TryGetValue(sessionId, out UserSession session))
                 return new NotFoundObjectResult("No session registered"); //TODO const-ify this
 
-            return new JsonResult(new GameInfo(session.Lobby.Game));
+            return new JsonResult(new GameInfo(session.GameSession.Lobby.Game));
         }
 
         // POST api/game
@@ -40,19 +41,19 @@ namespace ReversiAPI.Controllers
 
             Scenario scenario = Scenario.Scenarios[scenarioId];
 
+
             UserSession userSession = UserSessionManager.UserSessions[sessionId];
-            GameLobby lobby = userSession.Lobby;
+            GameLobby lobby = userSession.GameSession.Lobby;
 
 //            if (lobby.Game != null) return new ConflictObjectResult("Session already has game");
 
             lobby.Game = new Game(scenario);
 
-            const string whiteHex = "FFFFFF";
+            if (!lobby.RegisterUserPlayer(userSession.User, out Player player)) return new ConflictResult();
 
-            userSession.Player = userSession.Lobby.Game.Players[whiteHex];
-            //TODO Player from Database (maybe with colour)
+            userSession.GameSession.Player = player;
 
-            return new OkResult();
+            return new OkObjectResult(new PlayerInfo(player));
         }
     }
 }

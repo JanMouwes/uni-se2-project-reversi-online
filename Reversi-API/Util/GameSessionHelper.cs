@@ -8,12 +8,12 @@ namespace ReversiAPI.Util
     {
         private readonly UserSession session;
 
-        public static bool SessionExists(string sessionId) => UserSessionManager.UserSessions.ContainsKey(sessionId);
+        public static bool SessionExists(string sessionId) => UserSessionManager.UserSessions[sessionId].GameSession != null;
 
-        public Game CurrentGame => session.Lobby.Game;
+        public Game CurrentGame => session.GameSession.Lobby.Game;
 
 
-        public Player SessionPlayer => session.Player;
+        public Player SessionPlayer => session.GameSession.Player;
 
         public bool SessionPlayerIsCurrentPlayer => SessionPlayer == CurrentGame.CurrentPlayer;
 
@@ -26,11 +26,12 @@ namespace ReversiAPI.Util
 
         public void ClearGame()
         {
-            session.Lobby = null;
+            session.GameSession.Lobby = null;
         }
 
         public void Dispose()
         {
+            ClearGame();
         }
     }
 }

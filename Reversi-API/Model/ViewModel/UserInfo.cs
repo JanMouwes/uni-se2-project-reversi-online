@@ -5,16 +5,13 @@ namespace ReversiAPI.Model.ViewModel
 {
     public class UserInfo
     {
-        public UserInfo(Player player)
+        public UserInfo(User player)
         {
-            Colour = player.Colour;
-            UserName = player.Colour;
+            UserName = player.Username;
         }
 
         [DataMember] public int Id;
 
         [DataMember] public string UserName;
-
-        [DataMember] public string Colour;
     }
 }

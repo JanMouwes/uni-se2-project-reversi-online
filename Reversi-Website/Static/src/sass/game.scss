@@ -1,0 +1,39 @@
+#game-board {
+  width: 600px;
+  height: 600px;
+}
+
+@mixin reversi-piece($background-colour, $stroke-colour) {
+  background-color: $background-colour;
+
+  &: hover {
+    stroke: 0px solid $stroke-colour;
+  }
+}
+
+%reversi-piece {
+  &:hover {
+    opacity: .9;
+  }
+}
+
+.reversi-piece-black {
+  @extend %reversi-piece;
+  @include reversi-piece(black, white);
+}
+
+.reversi-piece-white {
+  @extend %reversi-piece;
+  @include reversi-piece(white, black);
+}
+
+.reversi-piece-selected {
+  stroke-width: 1px;
+}
+
+.reversi-board-cell {
+
+  &:hover {
+    opacity: .9;
+  }
+}

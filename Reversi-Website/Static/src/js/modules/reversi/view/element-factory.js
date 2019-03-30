@@ -24,11 +24,26 @@ Reversi.BoardElementFactory = function () {
             //NICER 'recalculate' these Coords through a Coords/CellCalculator of sorts.
         };
 
+        let piece_css_class;
+
+        switch (piece.colour) {
+            case Reversi.Piece.Colours.BLACK:
+                piece_css_class = "reversi-piece-black";
+                break;
+            case Reversi.Piece.Colours.WHITE:
+                piece_css_class = "reversi-piece-white";
+                break;
+            default:
+                throw new Error("Unknown colour " + piece.colour);
+        }
+
         element.addEventListener("click", (event) => {
             event.preventDefault();
 
             piece.click();
         });
+
+        element.classList.add("reversi-piece");
 
         if (piece.isSelected) {
             element_attributes["stroke-width"] = ".5";
@@ -55,6 +70,7 @@ Reversi.BoardElementFactory = function () {
             style: "fill:" + cell.colour
         };
 
+
         Reversi.BoardElementFactory.SVGUtil.setAttributesNS(cellElement, cell_attributes);
 
         cellElement.addEventListener("click", (event) => {
@@ -64,6 +80,8 @@ Reversi.BoardElementFactory = function () {
 
             cell.onClick();
         });
+
+        cellElement.classList.add("reversi-board-cell");
 
         cellElement.addEventListener("contextmenu", (event) => {
             event.preventDefault();

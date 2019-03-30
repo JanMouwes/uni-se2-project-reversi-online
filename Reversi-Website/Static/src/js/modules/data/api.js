@@ -1,15 +1,21 @@
-/**
- *
- * @type {{makeMove, getScenario, pieceAPI, gameAPI}}
- */
 SPA.Data = (() => {
+    const constructURIString = (object) => {
+        let outputArray = [];
+
+        Object.keys(object).map(key => {
+            key = encodeURIComponent(key);
+            let value = encodeURIComponent(object[key]);
+            outputArray.push(key + "=" + value);
+        });
+
+        return outputArray.join("&");
+    };
 
     const API_HOST = "http://localhost:5000";
 
     let eventEmitter;
 
     let eventNames = {
-        moveMade: "move-made",
         lobbyOpened: "lobby-opened",
         lobbyJoined: "lobby-joined",
     };
@@ -28,9 +34,16 @@ SPA.Data = (() => {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "session-id": sessionId
                 }
-            }).then(response => response.ok ? scenarioId : Promise.reject());
+            })
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(data => Reversi.setPlayerColour(data.colour));
     };
 
+    /**
+     *
+     * @return {Promise<SPA.Data.GameDTO>}
+     * @private
+     */
     let _fetchCurrentGame = () => {
         return window.fetch(API_HOST + "/api/game",
             {
@@ -40,7 +53,9 @@ SPA.Data = (() => {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "session-id": sessionId
                 }
-            }).then(response => response.ok ? response.json() : Promise.reject());
+            })
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(object => new SPA.Data.GameDTO(object));
     };
 
     let _openLobby = () => {
@@ -69,12 +84,14 @@ SPA.Data = (() => {
                     "Content-Type": "application/x-www-form-urlencoded",
                     "session-id": sessionId
                 }
-            }).then(response => {
-            if (!response.ok) return Promise.reject();
+            })
+            .then(response => !response.ok ? Promise.reject() : response.json()
+            ).then(data => {
+                Reversi.setPlayerColour(data.colour);
 
-            eventEmitter.emit(eventNames.lobbyJoined);
-            return Promise.resolve(response);
-        });
+                eventEmitter.emit(eventNames.lobbyJoined);
+                return data;
+            });
     };
 
     let _fetchSessionId = () => {
@@ -90,6 +107,30 @@ SPA.Data = (() => {
 
     /**
      *
+     * @param {{Username: string, PasswordHash: string}}loginObject
+     * @return {Promise<Response | never>}
+     * @private
+     */
+    let _login = (loginObject) => {
+        let body = constructURIString(loginObject);
+        return window.fetch(
+            API_HOST + "/api/login",
+            {
+                method: "POST",
+                body: body,
+                headers: {
+                    "session-id": sessionId
+                },
+                mode: "cors"
+            })
+            .then(response => {
+                SPA.currentUser = new SPA.User(loginObject.Username);
+                return response.ok ? response.text() : Promise.reject()
+            })
+    };
+
+    /**
+     *
      * @return {Promise<Response>}
      * @private
      */
@@ -97,7 +138,6 @@ SPA.Data = (() => {
         let headers = new Headers({
             "session-id": sessionId
         });
-        //TODO preprocess to NEW BoardState-model
         return window.fetch(API_HOST + "/api/board",
             {
                 method: "GET",
@@ -146,17 +186,6 @@ SPA.Data = (() => {
      */
     let _makeMove = (from, to) => {
 
-        let constructURIString = (object) => {
-            let outputArray = [];
-
-            Object.keys(object).map(key => {
-                key = encodeURIComponent(key);
-                let value = encodeURIComponent(object[key]);
-                outputArray.push(key + "=" + value);
-            });
-
-            return outputArray.join("&");
-        };
 
         let body = {
             FromX: Number(from.x),
@@ -183,75 +212,14 @@ SPA.Data = (() => {
             if (response.ok) return Promise.resolve();
 
             return Promise.reject();
-        }).then(() => eventEmitter.emit(eventNames.moveMade));
+        });
     };
 
     /**
      *
-     * @param {number} scenarioId
-     * @return {Promise<Scenario>}
+     * @return {Promise<Response>}
      * @private
      */
-    let _getScenario = (scenarioId) => {
-
-        if (isNaN(scenarioId))
-            throw new Error("Invalid input");
-
-        scenarioId = Number(scenarioId);
-
-        /**
-         *
-         * @param {ReadableStreamReadResult} object
-         * @returns {Reversi.Scenario}
-         */
-        let processStreamToScenario = (object) => {
-            let scenarioData = JSON.parse(new TextDecoder("utf-8").decode(object.value));
-
-            let boardSize = Reversi.Size.parse(scenarioData.boardSize);
-
-            let scenario = new Reversi.Scenario(boardSize);
-
-            Object.keys(scenarioData.startingPositions).map(coordsString => {
-
-                let colour = scenarioData.startingPositions[coordsString];
-
-                colour = colour.split()[0] === "#" ? colour : "#".concat(colour);
-
-                coordsString = coordsString
-                    .replace("(", "")
-                    .replace(")", "");
-
-                let coords = Reversi.Coords.parse(coordsString);
-
-                scenario.addPiece(colour, coords);
-            });
-
-            return scenario;
-        };
-        //TODO type checking, rejecting, etc.
-
-        return window.fetch(
-            API_HOST + "/api/scenario/" + scenarioId,
-            {
-                method: "GET",
-                mode: "cors",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-            }).then(response => {
-
-            let reader = response.body.getReader();
-
-            return reader.read().then((object) => {
-                let scenario = processStreamToScenario(object);
-
-                if (scenario == null) return Promise.reject();
-
-                return Promise.resolve(scenario);
-            });
-        })
-    };
-
     let _fetchScenarioIds = () => {
         return window.fetch(
             API_HOST + "/api/scenario",
@@ -311,6 +279,128 @@ SPA.Data = (() => {
             .then(response => response.json());
     };
 
+    const LongPollDevice = (() => {
+        /**
+         * @type EventModule.EventEmitter
+         */
+        let _eventEmitter;
+
+        let mappedEvents = [];
+
+        let requestStarted = false;
+
+        const url = API_HOST + "/api/session/updates";
+
+        let _paused = false;
+
+        let _pause = function () {
+            _paused = true;
+        };
+
+        let _unpause = function () {
+            _paused = false;
+        };
+
+
+        /**
+         *
+         * @param url
+         * @return {Promise<Response>}
+         * @private
+         */
+        let _sendRequest = (url) => {
+            return window.fetch(url, {
+                headers: {
+                    "Connection": "Keep-Alive",
+                    "session-id": sessionId
+                }
+            })
+        };
+
+        let _checkUpdates = function () {
+            requestStarted = true;
+
+            let startRequest = function () {
+                return _sendRequest(url)
+                    .then(request => request.ok ? request.json() : Promise.reject())
+                    .then(function (data) {
+                        if (!(data instanceof Array)) return Promise.reject("Invalid data type: " + typeof(data));
+
+                        let callEvent = function (updateCode) {
+                            updateCode = updateCode.toString();
+
+                            if (!Object.keys(mappedEvents).includes(updateCode)) {
+                                console.log("Unknown update code " + updateCode);
+                                return;
+                            }
+
+                            eventEmitter.emit(mappedEvents[updateCode]);
+                        };
+
+                        data.forEach(callEvent);
+
+                        if (data === []) return;
+
+                        console.log(data);
+                    })
+                    .catch(error => console.log(error));
+            };
+
+            let promise = Promise.resolve(true);
+            setInterval(function () {
+                if (_paused) return;
+
+                promise = promise.then(function () {
+                    startRequest();
+                });
+            }, 500);
+        };
+
+        /**
+         *
+         * @param {number} updateCode
+         * @param {string} eventName
+         * @private
+         */
+        let _watch = (updateCode, eventName) => {
+
+            if (Object.keys(mappedEvents).includes(updateCode.toString()))
+                throw new Error("Update-code " + updateCode.toString() + " already has event " + mappedEvents[updateCode.toString()] + " assigned");
+
+            mappedEvents[updateCode] = eventName;
+
+            if (requestStarted) return;
+
+            _checkUpdates();
+        };
+
+        /**
+         *
+         * @param {Object<string, string>} updateCodes
+         * @param {EventModule.EventEmitter}eventEmitter
+         * @private
+         */
+        let _init = (updateCodes, eventEmitter = null) => {
+            eventEmitter = eventEmitter != null ? eventEmitter : new EventModule.EventEmitter();
+
+            _eventEmitter = eventEmitter;
+
+            Object.keys(updateCodes).forEach(value => LongPollDevice.watch(Number(value), updateCodes[value]));
+
+            //  Pause/unpause when window active/not active
+            window.addEventListener("blur", _pause);
+            window.addEventListener("focus", _unpause);
+        };
+
+        return {
+            init: _init,
+            watch: _watch,
+            subscribe: (eventName, callback) => eventEmitter.subscribe(eventName, callback),
+            unsubscribe: (eventName, callback) => eventEmitter.unsubscribe(eventName, callback)
+        }
+
+    })();
+
 
     /**
      *
@@ -319,21 +409,33 @@ SPA.Data = (() => {
     let _init = () => {
         eventEmitter = new EventModule.EventEmitter();
 
-        object.moveMade = new EventModule.EventSubscriber(eventNames.moveMade, eventEmitter);
-        object.lobbyOpened = new EventModule.EventSubscriber(eventNames.lobbyOpened, eventEmitter);
-        object.lobbyJoined = new EventModule.EventSubscriber(eventNames.lobbyJoined, eventEmitter);
-
+        //  Enable all EventSubscribers.
+        Object.keys(eventNames).forEach(value => object[value] = new EventModule.EventSubscriber(eventNames[value], eventEmitter));
         //TODO fetch UserInformation
 
-        _fetchSessionId().then(id => sessionId = id);
+        const updateCodes = {
+            "0": "move-made",
+            "1": "game-players-updated",
+            "2": "lobby-users-updated",
+            "3": "lobby-game-updated"
+        };
+        _fetchSessionId().then(id => sessionId = id).then(function () {
+            LongPollDevice.init(updateCodes, eventEmitter);
+        });
+
+        object.serverEvents = {};
+        Object.values(updateCodes).forEach(function (eventName) {
+            object.serverEvents[eventName] = new EventModule.EventSubscriber(eventName, eventEmitter);
+        })
+
     };
 
     let object = {
         API_HOST: API_HOST,
         init: _init,
+        login: _login,
         makeMove: _makeMove,
 
-        fetchScenario: _getScenario,
         fetchScenarioIds: _fetchScenarioIds,
 
         fetchLobby: _fetchLobby,
@@ -354,5 +456,4 @@ SPA.Data = (() => {
     };
 
     return object;
-
 })();

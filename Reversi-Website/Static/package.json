@@ -24,12 +24,14 @@
     "gulp-concat": "^2.6.1",
     "gulp-debug": "^4.0.0",
     "gulp-sass": "^4.0.2",
-    "gulp-uglifycss": "^1.1.0"
-  },
-  "dependencies": {
+    "gulp-uglifycss": "^1.1.0",
+    "gulp-handlebars": "^5.0.2",
+    "gulp-declare": "^0.3.0",
     "gulp-rename": "^1.4.0",
     "gulp-uglify": "^3.0.1",
+    "gulp-wrap": "^0.14.0",
     "jasmine-es6": "^0.4.3",
     "merge-stream": "^1.0.1"
-  }
+  },
+  "dependencies": {}
 }

@@ -14,9 +14,11 @@
     <script src="../js/modules/event-emitter/events/event-subscriber.js"></script>
 
     <script>
+        let body;
         window.addEventListener("load", () => {
+            body = document.getElementById("body");
 
-            FeedbackWidget.init();
+            FeedbackWidget.init(body);
             // SPA.init();
 
             //  NOTE Test code
@@ -24,15 +26,17 @@
         });
 
         let fireEvent = function (message, type = "positive", buttonLabels = []) {
-            let body = document.getElementById("body");
+
             const top = 0;
             const right = body.offsetWidth;
 
             let notification = FeedbackWidget.createNotification(type, message);
 
-            buttonLabels.forEach(item => notification.addButton(item).subscribe(function () {
-                notification.close();
-            }));
+            buttonLabels.forEach(item => notification
+                .addButton(item)
+                .subscribe(function () {
+                    notification.close();
+                }));
 
             body.appendChild(notification.display(right - 220, top + 20));
         }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using Reversi.Game;
 using ReversiAPI.Lobby;
 
@@ -10,18 +11,18 @@ namespace ReversiAPI.Model.ViewModel
         public GameLobbyInfo(GameLobby lobby)
         {
             Id = lobby.Id;
-            players = lobby.Players.Select(player => new UserInfo(player));
+            Users = lobby.Users.Select(player => new UserInfo(player));
 
             if (lobby.Game == null) return;
-            
+
             Game = new GameInfo(lobby.Game);
         }
 
-        public int Id;
+        [DataMember] public int Id;
 
-        public GameInfo Game { get; set; }
+        [DataMember] public GameInfo Game { get; set; }
 
-        private IEnumerable<UserInfo> players;
+        [DataMember] public IEnumerable<UserInfo> Users { get; set; }
 
         //TODO spectators
     }

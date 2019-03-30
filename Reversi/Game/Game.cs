@@ -12,8 +12,15 @@ using Reversi.Util;
 
 namespace Reversi.Game
 {
+    public delegate void MoveMadeDelegate(Move move);
+
+    public delegate void PlayerAddedDelegate(Player player);
+
     public class Game
     {
+        public event MoveMadeDelegate MoveMade;
+        public event PlayerAddedDelegate PlayerAdded;
+
         public Board.Board Board { get; }
 
         public PieceSpawner Spawner { get; }
@@ -68,6 +75,8 @@ namespace Reversi.Game
 
             Players[player.Colour] = player;
             PlayerQueue.Enqueue(player);
+
+            PlayerAdded?.Invoke(player);
         }
 
         /// <summary>
@@ -156,6 +165,8 @@ namespace Reversi.Game
             PieceFactory pieceFactory = new PieceFactory(player);
 
             Spawner.SpawnPiece(pieceFactory.CreatePiece(), to);
+
+            MoveMade?.Invoke(move);
 
             return true;
         }

@@ -11,7 +11,17 @@ Reversi.GameFactory = (function () {
      * @private
      */
     let _fromScenario = (scenario) => {
-        let board = _boardFactory.createBoard(scenario.boardSize.x, scenario.boardSize.y);
+        return _fromSize(scenario.boardSize);
+    };
+
+    /**
+     *
+     * @param {Reversi.Size} size
+     * @return {Reversi.Game} game
+     * @private
+     */
+    let _fromSize = (size) => {
+        let board = _boardFactory.createBoard(size.x, size.y);
 
         return new Reversi.Game(board);
     };
@@ -28,5 +38,6 @@ Reversi.GameFactory = (function () {
     return {
         init: _init,
         fromScenario: _fromScenario,
+        fromSize: _fromSize
     }
 })();

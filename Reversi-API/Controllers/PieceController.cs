@@ -19,7 +19,7 @@ namespace ReversiAPI.Controllers
         {
             string sessionId = Request.Headers["session-id"].ToString(); //FIXME to constant
 
-            Game currentGame = UserSessionManager.UserSessions[sessionId].Lobby.Game;
+            Game currentGame = UserSessionManager.UserSessions[sessionId].GameSession.Lobby.Game;
 
             IEnumerable<PieceInfo> pieces = new BoardInfo(currentGame.Board).Pieces;
 

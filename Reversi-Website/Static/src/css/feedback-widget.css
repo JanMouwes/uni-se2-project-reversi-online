@@ -3,6 +3,8 @@
     border-radius: 5px;
     width: 200px;
     padding: 10px;
+
+    position: absolute;
 }
 
 .feedback-widget-title, .feedback-widget-content {
@@ -15,12 +17,15 @@
 
 .feedback-widget-positive {
     background: #83c04b;
+    color: #016100;
 }
 
 .feedback-widget-negative {
     background: #c06254;
+    color: black;
 }
 
 .feedback-widget-neutral {
     background: #c0b66b;
+    color: #767017;
 }

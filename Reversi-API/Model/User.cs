@@ -2,8 +2,6 @@ namespace ReversiAPI.Model
 {
     public class User
     {
-        public string Username { get; }
-
-        public bool IsInGame => false;
+        public string Username { get; set; }
     }
 }

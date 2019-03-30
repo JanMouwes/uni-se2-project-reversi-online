@@ -9,7 +9,7 @@ namespace Reversi.Board
 {
     public class BoardInfo
     {
-        private Board board;
+        private readonly Board board;
 
         [DataMember] public Size Size => board.Size;
 

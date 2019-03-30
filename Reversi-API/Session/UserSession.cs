@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Reversi.Game;
 using ReversiAPI.Lobby;
+using ReversiAPI.Model;
 
 namespace ReversiAPI.Session
 {
@@ -13,8 +14,8 @@ namespace ReversiAPI.Session
 
         public string Id { get; }
         
-        public GameLobby Lobby { get; set; }
+        public GameSession GameSession { get; set; }
 
-        public Player Player { get; set; }
+        public User User { get; set; }
     }
 }

@@ -51,3 +51,8 @@ Reversi.Piece = function (colour) {
         this.isSelected = !this.isSelected;
     }
 };
+
+Reversi.Piece.Colours = {
+    BLACK: "#000000",
+    WHITE: "#FFFFFF"
+};

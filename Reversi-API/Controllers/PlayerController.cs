@@ -17,7 +17,7 @@ namespace ReversiAPI.Controllers
 
             UserSession currentSession = UserSessionManager.UserSessions[sessionId];
 
-            return currentSession.Player; //TODO player-viewmodel
+            return currentSession.GameSession.Player; //TODO player-viewmodel
         }
     }
 }

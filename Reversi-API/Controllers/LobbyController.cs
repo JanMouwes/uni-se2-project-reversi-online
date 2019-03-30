@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Reversi.Game;
 using Reversi.Util;
 using ReversiAPI.Lobby;
+using ReversiAPI.Model;
 using ReversiAPI.Model.ViewModel;
 using ReversiAPI.Session;
 
@@ -40,8 +41,7 @@ namespace ReversiAPI.Controllers
 
             if (!UserSessionManager.SessionExists(sessionId)) return new NotFoundResult();
 
-            //TODO checks and balances
-            UserSessionManager.UserSessions[sessionId].Lobby = lobby;
+            if (!UserSessionManager.SetSessionGameLobby(sessionId, lobby)) return new NotFoundResult();
 
             return new OkObjectResult(lobby.Id);
         }
@@ -51,16 +51,14 @@ namespace ReversiAPI.Controllers
         {
             string sessionId = Request.Headers["session-id"].ToString();
 
+            if (!UserSessionManager.SessionExists(sessionId)) return new NotFoundResult();
             if (!GameLobbyManager.TryGet(id, out GameLobby lobby)) return new NotFoundResult();
 
             UserSession userSession = UserSessionManager.UserSessions[sessionId];
 
-            userSession.Player = lobby.Game.Players.First(player => !lobby.Players.ToList().Contains(player.Value)).Value;
+            if (!UserSessionManager.SetSessionGameLobby(userSession, lobby)) return new NotFoundResult();
 
-            //TODO checks and balances
-            userSession.Lobby = lobby;
-
-            return new OkObjectResult(lobby.Id);
+            return new OkObjectResult(new PlayerInfo(userSession.GameSession.Player));
         }
     }
 }

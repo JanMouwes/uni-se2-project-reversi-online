@@ -1,5 +1,7 @@
 const FeedbackWidget = (function () {
 
+    let _target;
+
     let StorageManager = (function () {
         const MESSAGES_STORAGE_KEY = "FeedbackWidget-messages";
         const MAX_MESSAGE_COUNT = 10;
@@ -79,6 +81,12 @@ const FeedbackWidget = (function () {
             return closeButton;
         };
 
+        /**
+         *
+         * @param label
+         * @return {{clicked: EventModule.EventSubscriber, element: HTMLElement}}
+         * @private
+         */
         let _createButton = function (label) {
             let element = document.createElement("button");
             const eventName = "event-click";
@@ -179,10 +187,19 @@ const FeedbackWidget = (function () {
             return button.clicked
         };
 
+        notification.displayTarget = _target;
+
         return notification;
     };
 
-    let _init = () => {
+    /**
+     *
+     * @param {HTMLElement} target
+     * @return {boolean}
+     * @private
+     */
+    let _init = (target) => {
+        _target = target;
 
         return true;
     };
