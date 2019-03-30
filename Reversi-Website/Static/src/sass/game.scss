@@ -6,8 +6,8 @@
 @mixin reversi-piece($background-colour, $stroke-colour) {
   background-color: $background-colour;
 
-  &: hover {
-    stroke: 0px solid $stroke-colour;
+  &:hover {
+    border: 1px solid $stroke-colour;
   }
 }
 
