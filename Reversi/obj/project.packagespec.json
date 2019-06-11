@@ -12,6 +12,9 @@
     "originalTargetFrameworks": [
       "netcoreapp2.1"
     ],
+    "sources": {
+      "https://api.nuget.org/v3/index.json": {}
+    },
     "frameworks": {
       "netcoreapp2.1": {
         "projectReferences": {}
