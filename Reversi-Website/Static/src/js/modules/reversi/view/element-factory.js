@@ -12,6 +12,10 @@ Reversi.BoardElementFactory = function () {
      * @returns {SVGCircleElement}
      */
     this.createPieceElement = (piece) => {
+        /**
+         *
+         * @type {SVGCircleElement}
+         */
         let element = document.createElementNS(SVG_NAMESPACE, "circle");
 
         let adjustedCoords = new Reversi.Coords(piece.position.x + .5, piece.position.y + .5);
@@ -36,6 +40,11 @@ Reversi.BoardElementFactory = function () {
             default:
                 throw new Error("Unknown colour " + piece.colour);
         }
+        element.classList.add(piece_css_class);
+
+        if (piece.isSelected) {
+            element.classList.add("reversi-piece-selected");
+        }
 
         element.addEventListener("click", (event) => {
             event.preventDefault();
@@ -43,12 +52,6 @@ Reversi.BoardElementFactory = function () {
             piece.click();
         });
 
-        element.classList.add("reversi-piece");
-
-        if (piece.isSelected) {
-            element_attributes["stroke-width"] = ".5";
-            element_attributes["stroke"] = "white";
-        }
 
         Reversi.BoardElementFactory.SVGUtil.setAttributesNS(element, element_attributes);
         return element;

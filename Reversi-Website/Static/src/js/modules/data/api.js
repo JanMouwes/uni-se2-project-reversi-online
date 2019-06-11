@@ -124,8 +124,10 @@ SPA.Data = (() => {
                 mode: "cors"
             })
             .then(response => {
+                if (!response.ok) return Promise.reject;
+
                 SPA.currentUser = new SPA.User(loginObject.Username);
-                return response.ok ? response.text() : Promise.reject()
+                return response.text();
             })
     };
 
@@ -152,12 +154,11 @@ SPA.Data = (() => {
      * @private
      */
     let _getPieceCoordinates = () => {
-        let parseResponse = response => {
-            let reader = response.body.getReader();
+        return _fetchBoardState()
+            .then(response => response.ok ? response.json() : Promise.reject())
+            .then(function (object) {
 
-            return reader.read().then((object) => {
-
-                let boardData = JSON.parse(new TextDecoder("utf-8").decode(object.value));
+                let boardData = object;
 
                 let colourPieces = [];
 
@@ -169,12 +170,6 @@ SPA.Data = (() => {
 
                 return Promise.resolve(colourPieces);
             });
-        };
-
-
-        return _fetchBoardState()
-            .then(parseResponse);
-
     };
 
     /**
@@ -266,6 +261,11 @@ SPA.Data = (() => {
         });
     };
 
+    /**
+     *
+     * @return {Promise<any>}
+     * @private
+     */
     let _fetchLobbies = () => {
         return window.fetch(
             API_HOST + "/api/lobbies",
@@ -290,6 +290,8 @@ SPA.Data = (() => {
         let requestStarted = false;
 
         const url = API_HOST + "/api/session/updates";
+
+        let _updateCodes;
 
         let _paused = false;
 
@@ -374,6 +376,10 @@ SPA.Data = (() => {
             _checkUpdates();
         };
 
+        let _startPolling = function () {
+            Object.keys(_updateCodes).forEach(value => LongPollDevice.watch(Number(value), _updateCodes[value]));
+        };
+
         /**
          *
          * @param {Object<string, string>} updateCodes
@@ -385,7 +391,7 @@ SPA.Data = (() => {
 
             _eventEmitter = eventEmitter;
 
-            Object.keys(updateCodes).forEach(value => LongPollDevice.watch(Number(value), updateCodes[value]));
+            _updateCodes = updateCodes;
 
             //  Pause/unpause when window active/not active
             window.addEventListener("blur", _pause);
@@ -394,6 +400,7 @@ SPA.Data = (() => {
 
         return {
             init: _init,
+            startPolling: _startPolling,
             watch: _watch,
             subscribe: (eventName, callback) => eventEmitter.subscribe(eventName, callback),
             unsubscribe: (eventName, callback) => eventEmitter.unsubscribe(eventName, callback)
@@ -419,14 +426,18 @@ SPA.Data = (() => {
             "2": "lobby-users-updated",
             "3": "lobby-game-updated"
         };
-        _fetchSessionId().then(id => sessionId = id).then(function () {
-            LongPollDevice.init(updateCodes, eventEmitter);
-        });
 
-        object.serverEvents = {};
-        Object.values(updateCodes).forEach(function (eventName) {
-            object.serverEvents[eventName] = new EventModule.EventSubscriber(eventName, eventEmitter);
-        })
+        return _fetchSessionId()
+            .then(id => sessionId = id)
+            .then(function () {
+                LongPollDevice.init(updateCodes, eventEmitter);
+            })
+            .then(function () {
+                object.serverEvents = {};
+                Object.values(updateCodes).forEach(function (eventName) {
+                    object.serverEvents[eventName] = new EventModule.EventSubscriber(eventName, eventEmitter);
+                });
+            });
 
     };
 
@@ -443,6 +454,9 @@ SPA.Data = (() => {
         openLobby: _openLobby,
 
         joinLobby: _joinLobby,
+        startPolling: function () {
+            LongPollDevice.startPolling();
+        },
 
         pieceAPI: {
             getPieceCoordinates: _getPieceCoordinates
@@ -456,4 +470,5 @@ SPA.Data = (() => {
     };
 
     return object;
-})();
+})
+();

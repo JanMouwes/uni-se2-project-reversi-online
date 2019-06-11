@@ -5,12 +5,14 @@
  */
 Reversi.PieceFactory = function (colour) {
 
-    if (colour == null) throw new Error("colour cannot be null");
+    if (colour == null || colour.trim().length === 0) throw new Error("colour cannot be null or empty");
 
-    colour = colour.replace("#", "");
-    if (!colour.match(/^[0-9A-F]{6}$/)) throw new Error("Invalid hex colour code");
+    if (colour.charAt(0) !== "#")
+        colour = "#" + colour;
 
-    this.colour = "#" + colour;
+    if (!colour.match(/^#[0-9A-F]{6}$/)) throw new Error("Invalid hex colour code: " + colour);
+
+    this.colour = colour;
 
     /**
      *

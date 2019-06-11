@@ -1,19 +1,19 @@
-<div id="login-area">
+<div id="login-area" class="p-2">
     {{#if messageModel.hasMessage}}
         <span>{{messageModel.message}}</span>
     {{/if}}
     <form id="login-form">
-        <ul>
+        <ul class="list-unstyled">
             <li>
                 <label>
                     Username:
-                    <input type="text" name="username">
+                    <input type="text" name="username" class="form-control">
                 </label>
             </li>
             <li>
                 <label>
                     Password:
-                    <input type="password" name="password">
+                    <input type="password" name="password" class="form-control">
                 </label>
             <li>
                 <input type="submit" value="Login" class="btn btn-primary">

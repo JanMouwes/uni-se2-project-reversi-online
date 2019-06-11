@@ -58,13 +58,12 @@ describe("Notification-class", function () {
     });
     it("emits event when displayed", function () {
         let notification = new FeedbackWidget.Notification("neutral", "test-title", "test-content");
-
+        notification.displayTarget = document.createElement("div");
 
         let testObject = {
             testMethod: function () {
             }
         };
-
 
         spyOn(testObject, "testMethod");
 

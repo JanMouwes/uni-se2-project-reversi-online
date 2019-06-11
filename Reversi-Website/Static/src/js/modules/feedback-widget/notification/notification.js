@@ -34,9 +34,8 @@ FeedbackWidget.Notification = function (type, title, content) {
 
     /**
      *
-     * @param x
-     * @param y
-     * @return {null}
+     * @param {number} x
+     * @param {number} y
      */
     this.display = (x, y) => {
         let coords = new FeedbackWidget.Coords(x, y);
@@ -56,8 +55,6 @@ FeedbackWidget.Notification = function (type, title, content) {
         if (this.displayTarget == null) throw new Error("displayTarget is null or undefined");
 
         this.displayTarget.appendChild(this.element);
-
-        return this.element;
     };
 
     this.isShown = function () {

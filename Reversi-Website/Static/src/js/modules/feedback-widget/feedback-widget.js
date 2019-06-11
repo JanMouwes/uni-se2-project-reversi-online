@@ -53,30 +53,12 @@ const FeedbackWidget = (function () {
          */
         let _createCloseButton = function () {
             //  TODO make single class out of this.
-            const closeButtonSize = 15;
             const closeButtonSymbol = "&#10761;"; //Cross-symbol
 
             let closeButton = document.createElement("span");
 
             closeButton.innerHTML = closeButtonSymbol;
-            Object.assign(closeButton.style, {
-                //position in relation to parent element
-                position: "absolute",
-                right: "10px", //TODO find a way to make this dynamic
-                top: "10px",
-                //make x- and y-diameter equal
-                width: closeButtonSize + "px",
-                height: closeButtonSize + "px",
-                //centre text
-                textAlign: "center",
-                lineHeight: closeButtonSize + "px",
-                fontSize: closeButtonSize + "px",
-                //make 'button' into circle with black border
-                border: "1px solid black",
-                borderRadius: closeButtonSize + "px",
-                cursor: "pointer",
-                backgroundColor: "#E6E6E6"
-            });
+            closeButton.classList.add("close-button");
 
             return closeButton;
         };
@@ -96,6 +78,8 @@ const FeedbackWidget = (function () {
 
             element.innerText = label;
 
+            element.classList.add("button");
+
             element.addEventListener("click", function () {
                 eventEmitter.emit(eventName);
             });
@@ -112,22 +96,17 @@ const FeedbackWidget = (function () {
          * @return {HTMLDivElement}
          */
         let _create = function (notification) {
-            let feedbackWidgetClass;
-            switch (notification.type) { //TODO find a better way of doing this
-                case "positive":
-                    feedbackWidgetClass = "feedback-widget-positive";
-                    break;
-                case "negative":
-                    feedbackWidgetClass = "feedback-widget-negative";
-                    break;
-                default:
-                case "neutral":
-                    feedbackWidgetClass = "feedback-widget-neutral";
-                    break;
-            }
+
+            const whitelisted_types = [
+                "positive", "negative", "neutral"
+            ];
+
+            if (!whitelisted_types.includes(notification.type)) notification.type = "neutral";
+
+            let feedbackWidgetClass = "feedback-widget-" + notification.type;
 
             let element = document.createElement("div");
-            element.classList.add("feedback-widget", feedbackWidgetClass);
+            element.classList.add(feedbackWidgetClass);
 
             let titleElement = document.createElement("span");
             titleElement.classList.add("feedback-widget-title");

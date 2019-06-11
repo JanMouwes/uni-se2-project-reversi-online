@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link type="text/css" rel="stylesheet" href="../css/feedback-widget.css"/>
+    <link type="text/css" rel="stylesheet" href="../css/buttons.css"/>
+
+    <script src="../js/modules/spa.js"></script>
+    <script src="../vendor/Chart.bundle.js"></script>
+    <script src="../js/modules/data/api.js"></script>
+    <script src="../js/modules/chart/chart.js"></script>
+
+    <script>
+        let data = {
+            "02-10-1999": 2,
+            "03-10-1999": 1,
+            "04-10-1999": 8,
+            "05-10-1999": 3,
+            "06-10-1999": 4,
+            "07-10-1999": 5,
+            "08-10-1999": 6,
+        };
+
+        let chart;
+
+        function fireEvent() {
+
+            let now = new Date(Date.now());
+            let currentDateString =
+
+            chart.update();
+            if (Object.keys(data).includes(currentDateString)) return;
+
+            data[currentDateString] = Math.ceil(Math.random() * 9) + 1;
+        }
+
+
+        window.addEventListener("load", function () {
+
+
+            let target = document.getElementById("chart-target");
+            let ctx = target.getContext("2d");
+
+            chart = SPA.Chart.createAsteroidChart(ctx, data);
+        });
+    </script>
+
+    <style>
+        #chart-target-wrapper {
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body id="body">
+<button onclick="fireEvent()">1 Nice</button>
+<div id="chart-target-wrapper">
+    <canvas id="chart-target" height="200" width="200"></canvas>
+</div>
+</body>
+</html>

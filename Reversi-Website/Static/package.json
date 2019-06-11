@@ -31,7 +31,10 @@
     "gulp-uglify": "^3.0.1",
     "gulp-wrap": "^0.14.0",
     "jasmine-es6": "^0.4.3",
-    "merge-stream": "^1.0.1"
+    "merge-stream": "^1.0.1",
+    "jasmine-ajax": "latest"
   },
-  "dependencies": {}
+  "dependencies": {
+    "chart.js": "^2.8.0"
+  }
 }

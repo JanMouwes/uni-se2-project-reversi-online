@@ -1,0 +1,108 @@
+@import "buttons";
+
+$fade-in-time: 700ms;
+
+$close-button-size: 15px;
+$mobile-screen-size: 600px;
+
+$z-index: 10000;
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: $mobile-screen-size) {
+
+  %feedback-widget {
+    width: 90%;
+
+    .feedback-icon {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-screen-size) {
+  %feedback-widget {
+    width: 200px;
+
+    .feedback-icon {
+      display: block;
+    }
+  }
+}
+
+%feedback-widget {
+  border: 1px solid #333333;
+  border-radius: 5px;
+
+  padding: 10px;
+
+  text-align: left;
+
+  position: sticky;
+
+  animation: fade-in $fade-in-time;
+
+  z-index: $z-index;
+
+  > .close-button {
+    //position in relation to parent element
+    position: absolute;
+    right: 10px; //TODO find a way to make this dynamic
+    top: 10px;
+
+    //make x- and y-diameter equal
+    width: $close-button-size;
+    height: $close-button-size;
+
+    //centre text
+    line-height: $close-button-size;
+    font-size: $close-button-size;
+    text-align: center;
+
+    //make 'button' into circle with black border
+    border: 1px solid black;
+    border-radius: $close-button-size;
+    cursor: pointer;
+    background-color: #E6E6E6;
+  }
+
+  > .button {
+    @extend .button-animated
+  }
+}
+
+.feedback-widget-title, .feedback-widget-content {
+  display: block;
+}
+
+.feedback-widget-title {
+  font-weight: bold;
+}
+
+.feedback-widget-positive {
+  @extend %feedback-widget;
+
+  background: #83c04b;
+  color: #016100;
+}
+
+.feedback-widget-negative {
+  @extend %feedback-widget;
+
+  background: #c06254;
+  color: black;
+}
+
+.feedback-widget-neutral {
+  @extend %feedback-widget;
+
+  background: #c0b66b;
+  color: #767017;
+}

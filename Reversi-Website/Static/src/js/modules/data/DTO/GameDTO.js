@@ -19,7 +19,7 @@ SPA.Data.GameDTO = function (object) {
     /**
      * @type {Array}
      */
-    this.Moves = object.moves;
+    this.Moves = object.moves == null ? [] : object.moves;
 
     /**
      * @type {SPA.Data.PlayerDTO}

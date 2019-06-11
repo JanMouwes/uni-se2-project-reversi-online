@@ -10,13 +10,17 @@
     <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
     <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
     <script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+    <script type="text/javascript" src="../node_modules/jasmine-ajax/lib/mock-ajax.js"></script>
 
     <source-files>
+        <script src="../src/js/modules/spa.js"></script>
+        <script src="../src/js/modules/spa-feedback/feedback.js"></script>
+        <script src="../src/js/modules/data/api.js"></script>
         <script src="../src/js/modules/reversi/reversi.js"></script>
+        <script src="../src/js/modules/reversi/board/coords.js"></script>
         <script src="../src/js/modules/event-emitter/events.js"></script>
         <script src="../src/js/modules/event-emitter/events/event-emitter.js"></script>
         <script src="../src/js/modules/event-emitter/events/event-subscriber.js"></script>
-
         <script src="../src/js/modules/feedback-widget/feedback-widget.js"></script>
         <script src="../src/js/modules/feedback-widget/coords/coords.js"></script>
         <script src="../src/js/modules/feedback-widget/notification/notification.js"></script>
@@ -27,6 +31,8 @@
         <script src="feedback-widget/coords/coords.spec.js"></script>
         <script src="feedback-widget/notification/notification.spec.js"></script>
         <script src="feedback-widget/feedback-widget.spec.js"></script>
+        <script src="spa/spa.spec.js"></script>
+        <script src="data/api.spec.js"></script>
     </test-files>
 
 </head>

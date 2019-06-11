@@ -19,7 +19,7 @@ Reversi.Piece = function (colour) {
 
     /**
      *
-     * @type {Coords}
+     * @type {Reversi.Coords}
      */
     this.position = null;
 

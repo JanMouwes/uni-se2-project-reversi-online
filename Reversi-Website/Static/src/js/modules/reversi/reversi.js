@@ -34,10 +34,10 @@ const Reversi = (() => {
                         if (!player.ownsPiece(player.selectedPiece)) return;
 
                         SPA.Data.makeMove(player.selectedPiece.position, cell.coords)
-                            .then(() => eventEmitter.emit(eventNames.moveMade))
-                            .then(Reversi.Feedback.move_success)
-                            .catch(Reversi.Feedback.move_failure);
-                    }
+                           .then(() => eventEmitter.emit(eventNames.moveMade))
+                           .then(SPA.Feedback.move_success)
+                           .catch(SPA.Feedback.move_failure);
+                    };
                 });
 
                 game.pieces.forEach(piece => piece.onClick.subscribe(() => player.selectPiece(piece)));
@@ -73,15 +73,13 @@ const Reversi = (() => {
     let _reloadLobbies = function () {
         const target = document.getElementById("lobby-list");
 
-        SPA.Data.fetchLobbies().then(lobbies => target.innerHTML = SPA_Templates.reversi["lobby-list"]({
-            lobbies: lobbies
-        }));
+        SPA.Data.fetchLobbies().then(lobbies => target.innerHTML = SPA.Templating.lobbyList(lobbies));
     };
 
     let _startNewGame = function (scenarioId) {
         return SPA.Data.openLobby()
-            .then(() => SPA.Data.gameAPI.startNewGame(scenarioId))
-            .then(_initCurrentGame); //TODO catch
+                  .then(() => SPA.Data.gameAPI.startNewGame(scenarioId))
+                  .then(_initCurrentGame); //TODO catch
     };
 
     /**
@@ -90,8 +88,8 @@ const Reversi = (() => {
      */
     let _initCurrentGame = function () {
         SPA.Data.fetchCurrentGame()
-            .then(_loadGameDTO)
-            .then(_initGameBoard);
+           .then(_loadGameDTO)
+           .then(_initGameBoard);
     };
 
     /**
@@ -127,7 +125,7 @@ const Reversi = (() => {
         initCurrentGame: _initCurrentGame,
         startNewGame: _startNewGame,
         setPlayerColour: _setPlayerColour,
-        reloadLobbies: _reloadLobbies,
+        reloadLobbies: _reloadLobbies
 
     };
 

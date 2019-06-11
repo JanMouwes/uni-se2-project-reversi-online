@@ -11,31 +11,10 @@
             let notificationTarget = document.getElementById("notification-target");
 
             SPA.init();
+            SPA.loadLogin();
+            SPA.loadAsteroidChart();
             FeedbackWidget.init(notificationTarget);
-
-            /**
-             *
-             * @type {HTMLFormElement}
-             */
-            let loginForm = document.getElementById("login-form");
-
-            loginForm.addEventListener("submit", function (event) {
-                event.preventDefault();
-
-                let data = new FormData(loginForm);
-                let username = data.get("username");
-                let password = data.get("password");
-
-                SPA.login({
-                    Username: username,
-                    PasswordHash: password,
-                })
-            });
-
-            // let scenarioSelector = document.getElementById("scenario-selector");
-
-
-            // Reversi.Data.fetchScenarioIds();
+            SPA.Login.init("login-form");
         });
     </script>
     <style>

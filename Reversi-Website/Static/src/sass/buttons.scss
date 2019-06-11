@@ -1,0 +1,50 @@
+$colour-primary: blue;
+$colour-positive: green;
+$colour-negative: red;
+
+$jiggle-offset: 2deg;
+$jiggle-duration: 1s;
+
+@keyframes jiggle {
+  10% {
+    transform: rotate(-$jiggle-offset);
+  }
+  20% {
+    transform: rotate(2 * $jiggle-offset);
+  }
+  30% {
+    transform: rotate(-$jiggle-offset);
+  }
+}
+
+.button {
+  padding: 3px 8px;
+  border: 1px solid grey;
+  border-radius: 3px;
+
+  margin: 1px;
+}
+
+@mixin button-type($background-colour, $text-colour) {
+  background-color: $background-colour;
+  color: $text-colour;
+}
+
+.button-primary {
+  @extend .button;
+  @include button-type($colour-primary, white)
+}
+
+.button-positive {
+  @extend .button;
+  @include button-type($colour-positive, white)
+}
+
+.button-negative {
+  @extend .button;
+  @include button-type($colour-negative, white)
+}
+
+.button-animated {
+  animation: jiggle $jiggle-duration infinite 2s;
+}

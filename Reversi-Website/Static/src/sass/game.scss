@@ -1,17 +1,37 @@
+$stroke-width: .1px;
+$stroke-width-hover: .4px;
+$stroke-width-selected: .6px;
+
 #game-board {
   width: 600px;
   height: 600px;
 }
 
+.reversi-board-cell {
+  transition: opacity 800ms;
+
+  &:hover {
+    opacity: .8;
+  }
+}
+
+//  <piece-area>
+
 @mixin reversi-piece($background-colour, $stroke-colour) {
   background-color: $background-colour;
 
+  stroke: $stroke-colour;
+  stroke-width: $stroke-width;
+  stroke-dasharray: 2;
+
   &:hover {
-    border: 1px solid $stroke-colour;
+    stroke-width: $stroke-width-hover;
   }
 }
 
 %reversi-piece {
+  transition: stroke-width 400ms;
+
   &:hover {
     opacity: .9;
   }
@@ -28,12 +48,13 @@
 }
 
 .reversi-piece-selected {
-  stroke-width: 1px;
-}
+  @extend %reversi-piece;
 
-.reversi-board-cell {
+  stroke-width: $stroke-width-selected;
 
   &:hover {
-    opacity: .9;
+    stroke-width: $stroke-width-selected;
   }
 }
+
+//  </piece-area>

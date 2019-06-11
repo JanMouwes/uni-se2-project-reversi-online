@@ -4,7 +4,7 @@
  * @param {number} y
  * @constructor
  */
-Reversi.Coords =function (x, y) {
+Reversi.Coords = function (x, y) {
     /**
      *
      * @type {number}
@@ -25,7 +25,13 @@ Reversi.Coords =function (x, y) {
         return x + ", " + y
     };
 
-
+    /**
+     *
+     * @param {Reversi.Coords} otherCoords
+     */
+    this.equals = function (otherCoords) {
+        return this.x === otherCoords.x && this.y === otherCoords.y
+    }
 };
 /**
  *
@@ -42,7 +48,7 @@ Reversi.Coords.parse = (input) => {
 
     input_split.map(item => {
         item = item.trim();
-        
+
         if (isNaN(Number(item)))
             isCorrectType = false;
     });

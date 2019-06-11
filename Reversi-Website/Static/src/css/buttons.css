@@ -1,0 +1,28 @@
+@keyframes jiggle {
+  10% {
+    transform: rotate(-2deg); }
+  20% {
+    transform: rotate(4deg); }
+  30% {
+    transform: rotate(-2deg); } }
+
+.button, .button-primary, .button-positive, .button-negative {
+  padding: 3px 8px;
+  border: 1px solid grey;
+  border-radius: 3px;
+  margin: 1px; }
+
+.button-primary {
+  background-color: blue;
+  color: white; }
+
+.button-positive {
+  background-color: green;
+  color: white; }
+
+.button-negative {
+  background-color: red;
+  color: white; }
+
+.button-animated {
+  animation: jiggle 1s infinite 2s; }
